@@ -1,0 +1,382 @@
+/* Premium Dark Tech & LinkedIn Style Combo */
+body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #090d16 0%, #111827 100%);
+    color: #f3f4f6;
+    margin: 0;
+    padding: 15px;
+    box-sizing: border-box;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 1. SEACH VA FILTRLAR */
+.search-container {
+    display: flex;
+    gap: 15px;
+    background: rgba(31, 41, 55, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.search-box {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    background: #1f2937;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    width: 100%;
+    margin-left: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+.filter-box select {
+    background: #1f2937;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+
+.ai-counter {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* 2. SPLIT LAYOUT (IKKI OYNA) */
+.main-layout {
+    display: flex;
+    gap: 15px;
+    flex: 1;
+    overflow: hidden; /* Ichki scrolni boshqarish uchun */
+}
+
+/* CHAP USTUN - RO'YXAT */
+.sidebar-list {
+    width: 35%;
+    background: rgba(31, 41, 55, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Kichik ixcham kartochka */
+.mini-job-card {
+    background: rgba(31, 41, 55, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mini-job-card:hover {
+    background: rgba(55, 65, 81, 0.8);
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+.mini-job-card.active {
+    background: rgba(2, 132, 199, 0.2);
+    border-color: #0284c7;
+    box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
+}
+
+.mini-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+.mini-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.m-price { color: #4ade80; font-weight: 500; }
+.m-loc { color: #94a3b8; }
+
+/* O'NG USTUN - TO'LIQ MA'LUMOT */
+.main-details {
+    width: 65%;
+    background: rgba(31, 41, 55, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 25px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.details-header h2 {
+    margin-top: 0;
+    color: #ffffff;
+    font-size: 22px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 12px;
+}
+
+.details-badges {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.b-price { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.b-loc { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+
+.details-body {
+    margin-top: 20px;
+    flex: 1;
+}
+
+.details-body h3 {
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+.details-body p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #e2e8f0;
+}
+
+.client-info {
+    margin-top: 25px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* CHORLOVChI TUGMA */
+.btn-take-job {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
+    transition: transform 0.1s;
+}
+
+.btn-take-job:hover {
+    background: linear-gradient(135deg, #4ade80 0%, #16a34a 100%);
+}
+
+.btn-take-job:active {
+    transform: scale(0.99);
+}
+
+/* Skrolbarni chiroyli qilish */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+
+
+/* --- FREELANCER PROFIL SAHIFASI UCHUN CSS --- */
+
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(31, 41, 55, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.profile-header h2 {
+    color: #38bdf8;
+    margin: 0 0 5px 0;
+}
+
+.profile-header p {
+    color: #94a3b8;
+    font-size: 14px;
+    margin: 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #cbd5e1;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group textarea {
+    width: 100%;
+    background: #1f2937;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #38bdf8;
+}
+
+/* Rasm yuklash dizayni */
+.avatar-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #1f2937;
+    border: 2px dashed #38bdf8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 10px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* PDF yuklash qismi */
+.resume-upload input[type="file"] {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px dashed #4ade80;
+    padding: 15px;
+    width: 100%;
+    border-radius: 8px;
+    color: #4ade80;
+    cursor: pointer;
+}
+
+.warning-text {
+    color: #ef4444; /* Qizil ogohlantirish */
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+/* Saqlash tugmasi */
+.btn-save {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
+    margin-top: 10px;
+}
+
+/* --- TOP NAVIGATSIYADAGI DUMALOQ PROFIL --- */
+.profile-nav {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 5px;
+}
+
+.nav-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Rasmni mukammal dumaloq qiladi */
+    background: #1f2937;
+    border: 2px solid #38bdf8; /* LinkedIn ko'k chizig'i */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+/* Ustiga borganda yashil rangga o'zgaradi */
+.nav-avatar:hover {
+    transform: scale(1.05);
+    border-color: #4ade80;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+}
+
+/* Yuklangan rasmning o'zi uchun dizayn */
+.nav-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Rasmni cho'zmasdan markazga moslaydi */
+}
+
+/* Rasm yuklanmagan bo'lsa chiqadigan odamcha ikonkasi */
+#avatarPlaceholder {
+    font-size: 20px;
+}
