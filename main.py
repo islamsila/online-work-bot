@@ -1,7 +1,7 @@
 import asyncio
 import os
-import threading  # Yangi qo'shildi
-from flask import Flask  # Yangi qo'shildi
+import threading
+from flask import Flask, send_from_directory  # Fayllarni uzatish uchun qo'shildi
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
@@ -10,15 +10,22 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from groq import Groq
 
-# --- Render portini tutib olish uchun Flask server (Yangi qo'shildi) ---
+# --- Flask server (HTML va CSS fayllarni internetga chiqarish) ---
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bot muvaffaqiyatli ishlamoqda va port ochiq!"
+    return send_from_directory('.', 'index.html')
+
+@app.route('/freelancer.html')
+def freelancer_page():
+    return send_from_directory('.', 'freelancer.html')
+
+@app.route('/style.css')
+def serve_css():
+    return send_from_directory('.', 'style.css')
 
 def run_web():
-    # Render avtomatik beradigan PORT muhit o'zgaruvchisini oladi (sukut bo'yicha 7860)
     port = int(os.environ.get("PORT", 7860))
     app.run(host="0.0.0.0", port=port)
 # --------------------------------------------------------------------
@@ -28,7 +35,6 @@ load_dotenv("token.env")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# Agar tokenlar topilmasa, xatolik berishini oldini olish
 if not BOT_TOKEN or not GROQ_API_KEY:
     raise ValueError("BOT_TOKEN yoki GROQ_API_KEY topilmadi. token.env faylini tekshiring.")
 
@@ -39,7 +45,7 @@ groq_client = Groq(api_key=GROQ_API_KEY)
 
 # --- FSM (Holatlar) ---
 class JobPostState(StatesGroup):
-    waiting_for_details = State()  # Ish beruvchi ma'lumot kiritishini kutish
+    waiting_for_details = State()
 
 
 # --- Klaviaturalar (Keyboards) ---
@@ -51,8 +57,8 @@ def get_main_menu():
 
 
 def get_freelancer_webapp():
-    # DIQQAT: WebApp ishlashi uchun HTTPS ssilka kerak (masalan, ngrok orqali)
-    web_app_url = "https://sizning-domen.com/mini_app.html"
+    # BU YERGA O'ZINGIZNING HAQIQIY RENDER SSILKANGIZNI QO'YDIK
+    web_app_url = "https://online-work-bot.onrender.com/freelancer.html"
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🔍 Ish qidirish (Mini App)", web_app=WebAppInfo(url=web_app_url))]
     ])
@@ -98,9 +104,6 @@ async def role_selection(callback: CallbackQuery, state: FSMContext):
 @dp.message(JobPostState.waiting_for_details)
 async def process_job_details(message: Message, state: FSMContext):
     user_text = message.text
-
-    # Bu yerda Groq AI yordamida matnni tizimlashtiramiz
-    # Hozircha oddiy xabar qaytaramiz, keyin AI qismini to'liq ulaymiz
     await message.answer("Ma'lumotlaringiz qabul qilindi va bazaga saqlandi. Frilanserlar aloqaga chiqishini kuting!")
     await state.clear()
 
@@ -112,7 +115,6 @@ async def review_freelancer(callback: CallbackQuery):
 
     if action == "accept":
         await callback.message.edit_text("Siz bu frilanserni qabul qildingiz! Unga xabar yuborildi.")
-        # Bu yerda frilanserga bot orqali "Siz qabul qilindingiz" deb xabar yuborish logikasi bo'ladi
     else:
         await callback.message.edit_text("Siz bu frilanserni rad etdingiz.")
 
@@ -125,7 +127,7 @@ async def main():
 
 
 if __name__ == '__main__':
-    # Flask veb-serverini alohida oqimda (thread) fonda ishga tushiramiz
+    # Flask veb-serverini alohida oqimda fonda ishga tushiramiz
     threading.Thread(target=run_web, daemon=True).start()
     
     # Asosiy oqimda esa aiogram botimizni ishga tushiramiz
