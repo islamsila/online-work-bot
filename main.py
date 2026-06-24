@@ -1,5 +1,7 @@
 import asyncio
 import os
+import threading  # Yangi qo'shildi
+from flask import Flask  # Yangi qo'shildi
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
@@ -7,6 +9,19 @@ from aiogram.types import Message, CallbackQuery, WebAppInfo, InlineKeyboardMark
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from groq import Groq
+
+# --- Render portini tutib olish uchun Flask server (Yangi qo'shildi) ---
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot muvaffaqiyatli ishlamoqda va port ochiq!"
+
+def run_web():
+    # Render avtomatik beradigan PORT muhit o'zgaruvchisini oladi (sukut bo'yicha 7860)
+    port = int(os.environ.get("PORT", 7860))
+    app.run(host="0.0.0.0", port=port)
+# --------------------------------------------------------------------
 
 # 1. token.env faylidan o'zgaruvchilarni yuklash
 load_dotenv("token.env")
@@ -110,4 +125,8 @@ async def main():
 
 
 if __name__ == '__main__':
+    # Flask veb-serverini alohida oqimda (thread) fonda ishga tushiramiz
+    threading.Thread(target=run_web, daemon=True).start()
+    
+    # Asosiy oqimda esa aiogram botimizni ishga tushiramiz
     asyncio.run(main())
