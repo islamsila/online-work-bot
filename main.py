@@ -1,7 +1,5 @@
 import asyncio
 import os
-import threading
-from flask import Flask, send_from_directory  # Fayllarni uzatish uchun qo'shildi
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
@@ -9,26 +7,6 @@ from aiogram.types import Message, CallbackQuery, WebAppInfo, InlineKeyboardMark
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from groq import Groq
-
-# --- Flask server (HTML va CSS fayllarni internetga chiqarish) ---
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return send_from_directory('.', 'index.html')
-
-@app.route('/freelancer.html')
-def freelancer_page():
-    return send_from_directory('.', 'freelancer.html')
-
-@app.route('/style.css')
-def serve_css():
-    return send_from_directory('.', 'style.css')
-
-def run_web():
-    port = int(os.environ.get("PORT", 7860))
-    app.run(host="0.0.0.0", port=port)
-# --------------------------------------------------------------------
 
 # 1. token.env faylidan o'zgaruvchilarni yuklash
 load_dotenv("token.env")
@@ -45,7 +23,7 @@ groq_client = Groq(api_key=GROQ_API_KEY)
 
 # --- FSM (Holatlar) ---
 class JobPostState(StatesGroup):
-    waiting_for_details = State()
+    waiting_for_details = State()  # Ish beruvchi ma'lumot kiritishini kutish
 
 
 # --- Klaviaturalar (Keyboards) ---
@@ -57,8 +35,8 @@ def get_main_menu():
 
 
 def get_freelancer_webapp():
-    # BU YERGA O'ZINGIZNING HAQIQIY RENDER SSILKANGIZNI QO'YDIK
-    web_app_url = "https://online-work-bot.onrender.com/freelancer.html"
+    # Bu yerga vaqtinchalik o'zingizning GitHub Pages yoki istalgan ishlaydigan HTTPS ssilkani qo'yishingiz mumkin
+    web_app_url = "https://sizning-domen.com/mini_app.html" 
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🔍 Ish qidirish (Mini App)", web_app=WebAppInfo(url=web_app_url))]
     ])
@@ -104,6 +82,9 @@ async def role_selection(callback: CallbackQuery, state: FSMContext):
 @dp.message(JobPostState.waiting_for_details)
 async def process_job_details(message: Message, state: FSMContext):
     user_text = message.text
+
+    # Bu yerda Groq AI yordamida matnni tizimlashtiramiz
+    # Hozircha oddiy xabar qaytaramiz, keyin AI qismini to'liq ulaymiz
     await message.answer("Ma'lumotlaringiz qabul qilindi va bazaga saqlandi. Frilanserlar aloqaga chiqishini kuting!")
     await state.clear()
 
@@ -127,8 +108,4 @@ async def main():
 
 
 if __name__ == '__main__':
-    # Flask veb-serverini alohida oqimda fonda ishga tushiramiz
-    threading.Thread(target=run_web, daemon=True).start()
-    
-    # Asosiy oqimda esa aiogram botimizni ishga tushiramiz
     asyncio.run(main())
