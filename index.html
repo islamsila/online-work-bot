@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Work - LinkedIn Style</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
     <div class="search-container">
         
-        <div class="profile-nav" onclick="window.location.href='freelancer.html'" title="Profilga o'tish">
+        <div class="profile-nav" onclick="window.location.href='/m'" title="Profilga o'tish">
             <div class="nav-avatar" id="navAvatar">
                 <span id="avatarPlaceholder">👤</span>
             </div>
@@ -46,23 +46,21 @@
             🤖 <span id="vacancy-count">2</span> ta faol vakansiya
         </div>
 
-    </div> <div class="main-layout">
-        
+    </div> 
+    
+    <div class="main-layout">
         <div class="sidebar-list" id="job-list-container"></div>
-
         <div class="main-details" id="job-details-container">
             <div class="empty-state">
                 <p>Batafsil ma'lumotni ko'rish uchun chap tarafdan biron bir ishni tanlang.</p>
             </div>
         </div>
-
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Test uchun ma'lumotlar bazasi
         const jobsData = [
             {
                 id: 1,
@@ -84,7 +82,6 @@
 
         let selectedJob = null;
 
-        // Ro'yxatni ekranga chiqarish funksiyasi
         function renderJobs() {
             const listContainer = document.getElementById('job-list-container');
             listContainer.innerHTML = '';
@@ -107,7 +104,6 @@
             document.getElementById('vacancy-count').innerText = jobsData.length;
         }
 
-        // Ish tanlanganda o'ng oynani yangilash
         function selectJob(job) {
             selectedJob = job;
             renderJobs(); 
@@ -139,7 +135,6 @@
             `;
         }
 
-        // "Bu ishni olish" tugmasi bosilganda
         function submitApplication(jobId, jobTitle) {
             alert(`Sizning so'rovingiz va PDF rezyumengiz buyurtmachiga yuborildi!`);
             
@@ -152,10 +147,8 @@
             }
         }
 
-        // Ilk yuklanganda ro'yxatni chizish
         renderJobs();
 
-        // Brauzer xotirasidan yuklangan rasmni tekshirish
         function loadNavAvatar() {
             const savedAvatar = localStorage.getItem('userAvatar'); 
             if (savedAvatar) {
@@ -164,7 +157,6 @@
             }
         }
 
-        // Sahifa yuklanganda rasmni tekshirish
         loadNavAvatar();
     </script>
 </body>
