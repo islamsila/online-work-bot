@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frilanser Profili</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h2>Mening Profilim</h2>
+            <p>Mijozlar sizni ko'rishi uchun ma'lumotlarni to'ldiring</p>
+        </div>
+
+        <form id="profileForm" onsubmit="saveProfile(event)">
+            
+            <div class="form-group avatar-upload">
+                <div class="avatar-preview" id="avatarPreview">
+                    <span>👤 Rasm yuklash</span>
+                </div>
+                <input type="file" id="profileImage" accept="image/png, image/jpeg" onchange="previewImage(event)">
+            </div>
+
+            <div class="form-group">
+                <label>To'liq ismingiz:</label>
+                <input type="text" id="fullName" value="Otabek Kenesbaev" required>
+            </div>
+
+            <div class="form-group">
+                <label>Kasbingiz (Masalan: Python Backend Developer):</label>
+                <input type="text" id="jobTitle" required>
+            </div>
+
+            <div class="form-group">
+                <label>GitHub profilingiz:</label>
+                <input type="url" id="githubLink" placeholder="https://github.com/islamsila">
+            </div>
+
+            <div class="form-group">
+                <label>Bog'lanish uchun raqam / Telegram username:</label>
+                <input type="text" id="contactInfo" placeholder="+998 90 123 45 67 yoki @username" required>
+            </div>
+
+            <div class="form-group">
+                <label>Bajarilgan proektlaringiz (qisqacha ta'rif yoki linklar):</label>
+                <textarea id="projects" rows="4" placeholder="1. Telegram bot (Havola)&#10;2. Web ilova..."></textarea>
+            </div>
+
+            <div class="form-group resume-upload">
+                <label>Rezyume yuklash:</label>
+                <input type="file" id="resumeFile" accept=".pdf" required>
+                <div class="warning-text">⚠️ Faqat <b>resume.pdf</b> formatidagi fayl qabul qilinadi. (AI orqali tekshiriladi)</div>
+            </div>
+
+            <button type="submit" class="btn-save">💾 Profilni Saqlash</button>
+        </form>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // Rasmni tanlaganda ekranda ko'rsatish
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('avatarPreview');
+                preview.innerHTML = `<img src="${reader.result}" alt="Avatar">`;
+            }
+            if(event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+
+        // Saqlash bosilganda Telegram botga ma'lumot jo'natish
+        function saveProfile(event) {
+            event.preventDefault(); // Sahifa yangilanib ketishini to'xtatish
+
+            const fileInput = document.getElementById('resumeFile');
+            const file = fileInput.files[0];
+
+            // Fayl PDF ekanligini JS yordamida yana bir bor tekshiramiz
+            if (file && file.type !== "application/pdf") {
+                alert("Kechirasiz, faqat PDF fayl yuklashingiz kerak!");
+                return;
+            }
+
+            const profileData = {
+                action: "save_profile",
+                name: document.getElementById('fullName').value,
+                title: document.getElementById('jobTitle').value,
+                github: document.getElementById('githubLink').value,
+                contact: document.getElementById('contactInfo').value,
+                projects: document.getElementById('projects').value,
+                has_resume: file ? true : false,
+                has_avatar: document.getElementById('profileImage').files.length > 0
+            };
+
+            alert("Profilingiz saqlandi! Barcha fayllar botga uzatilmoqda...");
+            
+            if (tg.sendData) {
+                tg.sendData(JSON.stringify(profileData));
+            }
+        }
+    </script>
+</body>
+</html>
